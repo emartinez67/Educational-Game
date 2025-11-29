@@ -144,7 +144,9 @@ fun LoginScreen(
                                 } else if (selectedUser == "Parent") {
                                     loginViewModel.authenticateParent() { success, error ->
                                         if (success) {
-
+                                            navController.navigate(Routes.ParentDashboard(loginViewModel.emailInput)) {
+                                                popUpTo(Routes.Home) { inclusive = false }
+                                            }
                                         } else {
                                             loginViewModel.errorMessage = error
                                         }

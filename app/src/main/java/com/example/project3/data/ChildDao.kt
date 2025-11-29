@@ -12,4 +12,7 @@ interface ChildDao {
 
     @Query("SELECT * FROM Child WHERE email = :email")
     suspend fun getChildByEmail(email: String): Child?
+
+    @Query("SELECT * FROM Child WHERE parent_id = :parentId")
+    suspend fun getChildrenByParentId(parentId: Long): List<Child>
 }

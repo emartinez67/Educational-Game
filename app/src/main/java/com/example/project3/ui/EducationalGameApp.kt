@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.toRoute
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -26,6 +27,15 @@ sealed class Routes {
 
     @Serializable
     data object Registration
+
+    @Serializable
+    data class ParentDashboard(val parentEmail: String)
+
+    @Serializable
+    data class RegisterChild(val parentEmail: String)
+
+    @Serializable
+    data class ChildProgress(val childEmail: String)
 }
 
 @Composable
@@ -52,6 +62,41 @@ fun EducationalGameApp() {
         composable<Routes.Registration> {
             RegistrationScreen(
                 navController,
+                onUpClick = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable<Routes.ParentDashboard> { backStackEntry ->
+            val args = backStackEntry.toRoute<Routes.ParentDashboard>()
+            ParentDashboardScreen(
+                navController = navController,
+                parentEmail = args.parentEmail,
+                onUpClick = {
+                    navController.navigate(Routes.Home) {
+                        popUpTo(Routes.Home) { inclusive = false }
+                    }
+                }
+            )
+        }
+
+        composable<Routes.RegisterChild> { backStackEntry ->
+            val args = backStackEntry.toRoute<Routes.RegisterChild>()
+            RegisterChildScreen(
+                navController = navController,
+                parentEmail = args.parentEmail,
+                onUpClick = {
+                    navController.navigateUp()
+                }
+            )
+        }
+
+        composable<Routes.ChildProgress> { backStackEntry ->
+            val args = backStackEntry.toRoute<Routes.ChildProgress>()
+            ChildProgressScreen(
+                navController = navController,
+                childEmail = args.childEmail,
                 onUpClick = {
                     navController.navigateUp()
                 }

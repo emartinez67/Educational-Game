@@ -38,6 +38,12 @@ class UserRepository(context: Context) {
         }
     }
 
+    fun registerChild(child: Child) {
+        CoroutineScope(Dispatchers.IO).launch {
+            child.id = childDao.registerChild(child)
+        }
+    }
+
     suspend fun authenticateParent(email: String, password: String): Boolean {
         return withContext(Dispatchers.IO) {
             val parent = parentDao.getParentByEmail(email)
@@ -61,6 +67,12 @@ class UserRepository(context: Context) {
     suspend fun getChildByEmail(email: String): Child? {
         return withContext(Dispatchers.IO) {
             childDao.getChildByEmail(email)
+        }
+    }
+
+    suspend fun getChildrenByParentId(parentId: Long): List<Child> {
+        return withContext(Dispatchers.IO) {
+            childDao.getChildrenByParentId(parentId)
         }
     }
 }
