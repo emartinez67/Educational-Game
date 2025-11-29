@@ -50,4 +50,17 @@ class UserRepository(context: Context) {
             parentDao.getParentByEmail(email)
         }
     }
+
+    suspend fun authenticateChild(email: String, password: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            val child = childDao.getChildByEmail(email)
+            child != null && child.password == password
+        }
+    }
+
+    suspend fun getChildByEmail(email: String): Child? {
+        return withContext(Dispatchers.IO) {
+            childDao.getChildByEmail(email)
+        }
+    }
 }

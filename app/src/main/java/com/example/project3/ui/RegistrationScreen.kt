@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
@@ -30,100 +31,111 @@ fun RegistrationScreen(
     navController: NavController,
     registrationViewModel: RegistrationViewModel = viewModel(
         factory = RegistrationViewModel.Factory
-    )
+    ),
+    onUpClick: () -> Unit = { }
 ) {
-    Box(
-        modifier = Modifier.fillMaxSize()
-    ) {
-        LazyColumn(
-            modifier = Modifier.fillMaxSize(),
-            verticalArrangement = Arrangement.Center,
-            horizontalAlignment = Alignment.CenterHorizontally
+    Scaffold(
+        topBar = {
+            EducationalGameAppBar(
+                canNavigateBack = true,
+                onUpClick = onUpClick
+            )
+        }
+    ) { innerPadding ->
+        Box(
+            modifier = Modifier.fillMaxSize()
         ) {
-            item {
-                Text(
-                    text = "Register",
-                    style = MaterialTheme.typography.displayLarge
-                )
-            }
-            item {
-                Spacer(
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-            item {
-                FirstNameField(
-                    labelText = "First Name",
-                    textInput = registrationViewModel.firstNameInput,
-                    onValueChange = { registrationViewModel.firstNameInput = it }
-                )
-            }
-            item {
-                LastNameField(
-                    labelText = "Last Name",
-                    textInput = registrationViewModel.lastNameInput,
-                    onValueChange = { registrationViewModel.lastNameInput = it }
-                )
-            }
-            item {
-                RegistrationEmailField(
-                    labelText = "Email",
-                    textInput = registrationViewModel.emailInput,
-                    onValueChange = { registrationViewModel.emailInput = it }
-                )
-            }
-            item {
-                RegistrationPasswordField(
-                    labelText = "Password",
-                    textInput = registrationViewModel.passwordInput,
-                    onValueChange = { registrationViewModel.passwordInput = it }
-                )
-            }
-            item {
-                Spacer(
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-            item {
-                Button(
-                    onClick = {
-                        registrationViewModel.showErrors = true
-                        registrationViewModel.errorMessage = Validation().validateRegistration(
-                            registrationViewModel.firstNameInput,
-                            registrationViewModel.lastNameInput,
-                            registrationViewModel.emailInput,
-                            registrationViewModel.passwordInput
-                        )
-
-                        if (registrationViewModel.errorMessage.isEmpty()) {
-                            navController.navigate(Routes.Home)
-                            registrationViewModel.registerParent(
+            LazyColumn(
+                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                item {
+                    Text(
+                        text = "Register",
+                        style = MaterialTheme.typography.displayLarge,
+                        modifier = Modifier.padding(top = 30.dp)
+                    )
+                }
+                item {
+                    Spacer(
+                        modifier = Modifier.padding(16.dp)
+                    )
+                }
+                item {
+                    FirstNameField(
+                        labelText = "First Name",
+                        textInput = registrationViewModel.firstNameInput,
+                        onValueChange = { registrationViewModel.firstNameInput = it }
+                    )
+                }
+                item {
+                    LastNameField(
+                        labelText = "Last Name",
+                        textInput = registrationViewModel.lastNameInput,
+                        onValueChange = { registrationViewModel.lastNameInput = it }
+                    )
+                }
+                item {
+                    RegistrationEmailField(
+                        labelText = "Email",
+                        textInput = registrationViewModel.emailInput,
+                        onValueChange = { registrationViewModel.emailInput = it }
+                    )
+                }
+                item {
+                    RegistrationPasswordField(
+                        labelText = "Password",
+                        textInput = registrationViewModel.passwordInput,
+                        onValueChange = { registrationViewModel.passwordInput = it }
+                    )
+                }
+                item {
+                    Spacer(
+                        modifier = Modifier.padding(innerPadding)
+                    )
+                }
+                item {
+                    Button(
+                        onClick = {
+                            registrationViewModel.showErrors = true
+                            registrationViewModel.errorMessage = Validation().validateRegistration(
                                 registrationViewModel.firstNameInput,
                                 registrationViewModel.lastNameInput,
                                 registrationViewModel.emailInput,
                                 registrationViewModel.passwordInput
                             )
-                        }
-                    },
-                    modifier = Modifier.size(width = 200.dp, height = 50.dp),
-                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                        containerColor = Color(0xff62a3d1)
-                    )
-                ) {
-                    Text(text = "Register")
+
+                            if (registrationViewModel.errorMessage.isEmpty()) {
+                                navController.navigate(Routes.Home)
+                                registrationViewModel.registerParent(
+                                    registrationViewModel.firstNameInput,
+                                    registrationViewModel.lastNameInput,
+                                    registrationViewModel.emailInput,
+                                    registrationViewModel.passwordInput
+                                )
+                            }
+                        },
+                        modifier = Modifier.size(width = 200.dp, height = 50.dp),
+                        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                            containerColor = Color(0xff62a3d1)
+                        )
+                    ) {
+                        Text(text = "Register")
+                    }
                 }
-            }
-            item {
-                Spacer(
-                    modifier = Modifier.padding(16.dp)
-                )
-            }
-            if (registrationViewModel.showErrors && registrationViewModel.errorMessage.isNotEmpty()) {
                 item {
-                    Text(
-                        text = registrationViewModel.errorMessage,
-                        color = MaterialTheme.colorScheme.error
+                    Spacer(
+                        modifier = Modifier.padding(innerPadding)
                     )
+                }
+                if (registrationViewModel.showErrors && registrationViewModel.errorMessage.isNotEmpty()) {
+                    item {
+                        Text(
+                            text = registrationViewModel.errorMessage,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                    }
                 }
             }
         }

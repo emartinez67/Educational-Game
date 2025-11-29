@@ -50,4 +50,25 @@ class LoginViewModel(private val userRepo: UserRepository): ViewModel() {
             }
         }
     }
+
+    fun authenticateChild(onResult: (Boolean, String) -> Unit) {
+        loginError = ""
+
+        viewModelScope.launch {
+            try {
+                val isAuthenticated = userRepo.authenticateChild(emailInput, passwordInput)
+
+                if (isAuthenticated) {
+                    loginSuccess = true
+                    onResult(true, "")
+                } else {
+                    loginError = "Invalid email or password"
+                    onResult(false, "Invalid email or password")
+                }
+            } catch (e: Exception) {
+                loginError = "An error occurred during login"
+                onResult(false, "An error occurred during login")
+            }
+        }
+    }
 }
