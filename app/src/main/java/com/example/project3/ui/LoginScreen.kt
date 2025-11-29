@@ -38,10 +38,6 @@ fun LoginScreen(
 ) {
     var selectedUser by remember{ mutableStateOf("") }
     val radioOptions = listOf("Child", "Parent")
-    var emailInput by remember { mutableStateOf("") }
-    var passwordInput by remember { mutableStateOf("") }
-    var errorMessage by remember { mutableStateOf("") }
-    var showErrors by remember { mutableStateOf(false) }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -92,14 +88,14 @@ fun LoginScreen(
                 }
             }
             LoginEmailField(
-                textInput = emailInput,
+                textInput = loginViewModel.emailInput,
                 labelText = "Email",
-                onValueChange = { emailInput = it }
+                onValueChange = { loginViewModel.emailInput = it }
             )
             LoginPasswordField(
-                textInput = passwordInput,
+                textInput = loginViewModel.passwordInput,
                 labelText = "Password",
-                onValueChange = { passwordInput = it }
+                onValueChange = { loginViewModel.passwordInput = it }
             )
             Spacer(
                 modifier = Modifier.padding(16.dp)
@@ -112,7 +108,7 @@ fun LoginScreen(
 //                    passwordInput
 //                )
 
-                    if (errorMessage.isEmpty()) {
+                    if (loginViewModel.errorMessage.isEmpty()) {
                         navController.navigate("rules")
                     }
                 },
@@ -126,9 +122,9 @@ fun LoginScreen(
             Spacer(
                 modifier = Modifier.padding(16.dp)
             )
-            if (showErrors && errorMessage.isNotEmpty()) {
+            if (loginViewModel.showErrors && loginViewModel.errorMessage.isNotEmpty()) {
                 Text(
-                    text = errorMessage,
+                    text = loginViewModel.errorMessage,
                     color = MaterialTheme.colorScheme.error
                 )
             }

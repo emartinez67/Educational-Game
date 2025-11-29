@@ -2,6 +2,7 @@ package com.example.project3.ui
 
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -25,6 +26,8 @@ class RegistrationViewModel(private val userRepo: UserRepository): ViewModel() {
     var lastNameInput by mutableStateOf("")
     var emailInput by mutableStateOf("")
     var passwordInput by mutableStateOf("")
+    var showErrors by mutableStateOf(false)
+    var errorMessage by mutableStateOf("")
 
     fun registerParent(firstName: String, lastName: String, email: String, password: String) {
         userRepo.registerParent(Parent(

@@ -31,9 +31,6 @@ fun RegistrationScreen(
         factory = RegistrationViewModel.Factory
     )
 ) {
-    var showErrors by remember { mutableStateOf(false) }
-    var errorMessage by remember { mutableStateOf("") }
-
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -74,15 +71,15 @@ fun RegistrationScreen(
             )
             Button(
                 onClick = {
-                    showErrors = true
-                    errorMessage = Validation().validateRegistration(
+                    registrationViewModel.showErrors = true
+                    registrationViewModel.errorMessage = Validation().validateRegistration(
                         registrationViewModel.firstNameInput,
                         registrationViewModel.lastNameInput,
                         registrationViewModel.emailInput,
                         registrationViewModel.passwordInput
                     )
 
-                    if (errorMessage.isEmpty()) {
+                    if (registrationViewModel.errorMessage.isEmpty()) {
                         navController.navigate(Routes.Home)
                         registrationViewModel.registerParent(
                             registrationViewModel.firstNameInput,
@@ -102,9 +99,9 @@ fun RegistrationScreen(
             Spacer(
                 modifier = Modifier.padding(16.dp)
             )
-            if (showErrors && errorMessage.isNotEmpty()) {
+                if (registrationViewModel.showErrors && registrationViewModel.errorMessage.isNotEmpty()) {
                 Text(
-                    text = errorMessage,
+                    text = registrationViewModel.errorMessage,
                     color = MaterialTheme.colorScheme.error
                 )
             }
