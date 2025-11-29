@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
@@ -30,6 +31,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
+import com.example.project3.data.Validation
+import kotlin.math.log
 
 @Composable
 fun LoginScreen(
@@ -42,91 +45,109 @@ fun LoginScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        Column(
+        LazyColumn(
             modifier = Modifier.fillMaxSize(),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            Text(
-                text = "Login",
-                style = MaterialTheme.typography.displayLarge
-            )
-            Spacer(
-                modifier = Modifier.padding(16.dp)
-            )
-            Row(
-                modifier = Modifier.selectableGroup(),
-                verticalAlignment = Alignment.CenterVertically
-            ){
+            item {
                 Text(
-                    text = "I am a: ",
-                    fontSize = 30.sp
+                    text = "Login",
+                    style = MaterialTheme.typography.displayLarge
                 )
-                radioOptions.forEach { text ->
-                    Column(
-                        modifier = Modifier.selectable(
-                            selected = (text == selectedUser),
-                            onClick = {
-                                selectedUser = text
-                                loginViewModel.selectedUserType = selectedUser
-                              },
-                            role = Role.RadioButton
-                        ),
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        RadioButton(
-                            selected = (text == selectedUser),
-                            onClick = null,
-                            modifier = Modifier.padding(top = 10.dp)
-                        )
-                        Text(
-                            text = text,
-                            fontSize = 20.sp,
-                            modifier = Modifier.padding(10.dp)
-                        )
+            }
+            item {
+                Spacer(
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            item {
+                Row(
+                    modifier = Modifier.selectableGroup(),
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "I am a: ",
+                        fontSize = 30.sp
+                    )
+                    radioOptions.forEach { text ->
+                        Column(
+                            modifier = Modifier.selectable(
+                                selected = (text == selectedUser),
+                                onClick = {
+                                    selectedUser = text
+                                    loginViewModel.selectedUserType = selectedUser
+                                },
+                                role = Role.RadioButton
+                            ),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            RadioButton(
+                                selected = (text == selectedUser),
+                                onClick = null,
+                                modifier = Modifier.padding(top = 10.dp)
+                            )
+                            Text(
+                                text = text,
+                                fontSize = 20.sp,
+                                modifier = Modifier.padding(10.dp)
+                            )
+                        }
                     }
                 }
             }
-            LoginEmailField(
-                textInput = loginViewModel.emailInput,
-                labelText = "Email",
-                onValueChange = { loginViewModel.emailInput = it }
-            )
-            LoginPasswordField(
-                textInput = loginViewModel.passwordInput,
-                labelText = "Password",
-                onValueChange = { loginViewModel.passwordInput = it }
-            )
-            Spacer(
-                modifier = Modifier.padding(16.dp)
-            )
-            Button(
-                onClick = {
-//                showErrors = true
-//                errorMessage = Validation().validateLogin(
-//                    emailInput,
-//                    passwordInput
-//                )
-
-                    if (loginViewModel.errorMessage.isEmpty()) {
-                        navController.navigate("rules")
-                    }
-                },
-                modifier = Modifier.size(width = 200.dp, height = 50.dp),
-                colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                    containerColor = Color(0xff62a3d1)
+            item {
+                LoginEmailField(
+                    textInput = loginViewModel.emailInput,
+                    labelText = "Email",
+                    onValueChange = { loginViewModel.emailInput = it }
                 )
-            ) {
-                Text(text = "Log In")
             }
-            Spacer(
-                modifier = Modifier.padding(16.dp)
-            )
-            if (loginViewModel.showErrors && loginViewModel.errorMessage.isNotEmpty()) {
-                Text(
-                    text = loginViewModel.errorMessage,
-                    color = MaterialTheme.colorScheme.error
+            item {
+                LoginPasswordField(
+                    textInput = loginViewModel.passwordInput,
+                    labelText = "Password",
+                    onValueChange = { loginViewModel.passwordInput = it }
                 )
+            }
+            item {
+                Spacer(
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            item {
+                Button(
+                    onClick = {
+                        loginViewModel.showErrors = true
+                        loginViewModel.errorMessage = Validation().validateLogin(
+                            loginViewModel.emailInput,
+                            loginViewModel.passwordInput
+                        )
+
+                        if (loginViewModel.errorMessage.isEmpty()) {
+                            navController.navigate("rules")
+                        }
+                    },
+                    modifier = Modifier.size(width = 200.dp, height = 50.dp),
+                    colors = androidx.compose.material3.ButtonDefaults.buttonColors(
+                        containerColor = Color(0xff62a3d1)
+                    )
+                ) {
+                    Text(text = "Log In")
+                }
+            }
+            item {
+                Spacer(
+                    modifier = Modifier.padding(16.dp)
+                )
+            }
+            if (loginViewModel.showErrors && loginViewModel.errorMessage.isNotEmpty()) {
+                item {
+                    Text(
+                        text = loginViewModel.errorMessage,
+                        color = MaterialTheme.colorScheme.error
+                    )
+                }
             }
         }
     }
