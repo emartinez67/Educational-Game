@@ -37,7 +37,9 @@ import kotlin.math.log
 @Composable
 fun LoginScreen(
     navController: NavController,
-    loginViewModel: LoginViewModel = viewModel(),
+    loginViewModel: LoginViewModel = viewModel(
+        factory = LoginViewModel.Factory
+    ),
 ) {
     var selectedUser by remember{ mutableStateOf("") }
     val radioOptions = listOf("Child", "Parent")
@@ -125,7 +127,19 @@ fun LoginScreen(
                         )
 
                         if (loginViewModel.errorMessage.isEmpty()) {
-                            navController.navigate("rules")
+                            if (selectedUser.isEmpty()) {
+                                loginViewModel.errorMessage = "Please select user type (Child or Parent)"
+                            }
+                            else if (selectedUser == "Parent"){
+                                loginViewModel.authenticateParent() { success, error ->
+                                    if (success) {
+
+                                    }
+                                    else {
+                                        loginViewModel.errorMessage = error
+                                    }
+                                }
+                            }
                         }
                     },
                     modifier = Modifier.size(width = 200.dp, height = 50.dp),

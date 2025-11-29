@@ -7,6 +7,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UserRepository(context: Context) {
 
@@ -34,6 +35,19 @@ class UserRepository(context: Context) {
     fun registerParent(parent: Parent) {
         CoroutineScope(Dispatchers.IO).launch {
             parent.id = parentDao.registerParent(parent)
+        }
+    }
+
+    suspend fun authenticateParent(email: String, password: String): Boolean {
+        return withContext(Dispatchers.IO) {
+            val parent = parentDao.getParentByEmail(email)
+            parent != null && parent.password == password
+        }
+    }
+
+    suspend fun getParentByEmail(email: String): Parent? {
+        return withContext(Dispatchers.IO) {
+            parentDao.getParentByEmail(email)
         }
     }
 }
