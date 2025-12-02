@@ -47,4 +47,11 @@ class ParentDashboardViewModel(private val userRepo: UserRepository): ViewModel(
             }
         }
     }
+
+    fun deleteChild(child: Child) {
+        viewModelScope.launch {
+            userRepo.deleteChild(child)
+            loadChildren()
+        }
+    }
 }

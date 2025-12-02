@@ -1,29 +1,14 @@
 package com.example.project3.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -31,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
-import com.example.project3.data.Child
 
 @Composable
 fun ParentDashboardScreen(
@@ -71,7 +55,6 @@ fun ParentDashboardScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-            // Welcome message
             Text(
                 text = "Welcome, ${parentDashboardViewModel.parentFirstName}!",
                 style = MaterialTheme.typography.headlineMedium,
@@ -84,7 +67,6 @@ fun ParentDashboardScreen(
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            // Children list
             if (parentDashboardViewModel.children.isEmpty()) {
                 Box(
                     modifier = Modifier
@@ -124,6 +106,9 @@ fun ParentDashboardScreen(
                             child = child,
                             onClick = {
                                 navController.navigate(Routes.ChildProgress(child.email))
+                            },
+                            onDelete = {
+                                parentDashboardViewModel.deleteChild(child)
                             }
                         )
                     }
@@ -135,9 +120,12 @@ fun ParentDashboardScreen(
 
 @Composable
 fun ChildCard(
-    child: Child,
-    onClick: () -> Unit
+    child: com.example.project3.data.Child,
+    onClick: () -> Unit,
+    onDelete: () -> Unit
 ) {
+    var showDeleteDialog by remember { mutableStateOf(false) }
+
     Card(
         modifier = Modifier
             .fillMaxWidth(),
@@ -153,25 +141,67 @@ fun ChildCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Column {
-                Text(
-                    text = "${child.firstName} ${child.lastName}",
-                    style = MaterialTheme.typography.titleMedium,
-                    fontSize = 20.sp
+            Row(
+                verticalAlignment = Alignment.CenterVertically,
+                modifier = Modifier.weight(1f)
+            ) {
+                Icon(
+                    Icons.Default.Person,
+                    contentDescription = null,
+                    modifier = Modifier.size(40.dp),
+                    tint = Color(0xff62a3d1)
                 )
-                Text(
-                    text = child.email,
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Gray,
-                    fontSize = 14.sp
+                Spacer(modifier = Modifier.width(12.dp))
+                Column {
+                    Text(
+                        text = "${child.firstName} ${child.lastName}",
+                        style = MaterialTheme.typography.titleMedium,
+                        fontSize = 20.sp
+                    )
+                    Text(
+                        text = child.email,
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = Color.Gray,
+                        fontSize = 14.sp
+                    )
+                }
+            }
+            IconButton(
+                onClick = { showDeleteDialog = true }
+            ) {
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = "Delete child",
+                    tint = Color(0xFFD32F2F)
                 )
             }
-            Icon(
-                Icons.Default.Person,
-                contentDescription = null,
-                modifier = Modifier.size(40.dp),
-                tint = Color(0xff62a3d1)
-            )
         }
+    }
+
+    if (showDeleteDialog) {
+        AlertDialog(
+            onDismissRequest = { showDeleteDialog = false },
+            title = { Text("Remove Child") },
+            text = {
+                Text("Are you sure you want to remove ${child.firstName} ${child.lastName} from your account? This action cannot be undone.")
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        showDeleteDialog = false
+                        onDelete()
+                    }
+                ) {
+                    Text("Remove", color = Color(0xFFD32F2F))
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = { showDeleteDialog = false }
+                ) {
+                    Text("Cancel")
+                }
+            }
+        )
     }
 }

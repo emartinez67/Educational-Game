@@ -1,6 +1,7 @@
 package com.example.project3.data
 
 import androidx.room.Dao
+import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
@@ -15,4 +16,7 @@ interface ChildDao {
 
     @Query("SELECT * FROM Child WHERE parent_id = :parentId")
     suspend fun getChildrenByParentId(parentId: Long): List<Child>
+
+    @Delete
+    suspend fun deleteChild(child: Child)
 }
