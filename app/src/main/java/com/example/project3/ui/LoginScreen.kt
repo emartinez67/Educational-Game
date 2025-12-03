@@ -1,39 +1,30 @@
 package com.example.project3.ui
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.selectableGroup
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Button
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.RadioButton
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextField
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.Role
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.project3.data.Validation
-import kotlin.math.log
 
 @Composable
 fun LoginScreen(
@@ -43,7 +34,7 @@ fun LoginScreen(
     ),
     onUpClick: () -> Unit = { }
 ) {
-    var selectedUser by remember{ mutableStateOf("") }
+    var selectedUser by remember { mutableStateOf("") }
     val radioOptions = listOf("Child", "Parent")
 
     Scaffold(
@@ -55,132 +46,178 @@ fun LoginScreen(
         }
     ) { innerPadding ->
         Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
+                .background(
+                    Brush.verticalGradient(
+                        colors = listOf(
+                            Color(0xFFE3F2FD),
+                            Color.White
+                        )
+                    )
+                )
         ) {
             LazyColumn(
-                modifier = Modifier.fillMaxSize().padding(innerPadding),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .padding(horizontal = 24.dp),
                 verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 item {
-                    Text(
-                        text = "Login",
-                        style = MaterialTheme.typography.displayLarge,
-                        modifier = Modifier.padding(top = 30.dp)
-                    )
-                }
-                item {
-                    Spacer(
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-                item {
-                    Row(
-                        modifier = Modifier.selectableGroup(),
-                        verticalAlignment = Alignment.CenterVertically
+                    Card(
+                        modifier = Modifier.fillMaxWidth(),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color.White
+                        ),
+                        shape = RoundedCornerShape(16.dp),
+                        elevation = CardDefaults.cardElevation(8.dp)
                     ) {
-                        Text(
-                            text = "I am a: ",
-                            fontSize = 30.sp
-                        )
-                        radioOptions.forEach { text ->
-                            Column(
-                                modifier = Modifier.selectable(
-                                    selected = (text == selectedUser),
-                                    onClick = {
-                                        selectedUser = text
-                                        loginViewModel.selectedUserType = selectedUser
-                                    },
-                                    role = Role.RadioButton
-                                ),
-                                horizontalAlignment = Alignment.CenterHorizontally
-                            ) {
-                                RadioButton(
-                                    selected = (text == selectedUser),
-                                    onClick = null,
-                                    modifier = Modifier.padding(top = 10.dp)
-                                )
-                                Text(
-                                    text = text,
-                                    fontSize = 20.sp,
-                                    modifier = Modifier.padding(10.dp)
-                                )
-                            }
-                        }
-                    }
-                }
-                item {
-                    LoginEmailField(
-                        textInput = loginViewModel.emailInput,
-                        labelText = "Email",
-                        onValueChange = { loginViewModel.emailInput = it }
-                    )
-                }
-                item {
-                    LoginPasswordField(
-                        textInput = loginViewModel.passwordInput,
-                        labelText = "Password",
-                        onValueChange = { loginViewModel.passwordInput = it }
-                    )
-                }
-                item {
-                    Spacer(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-                item {
-                    Button(
-                        onClick = {
-                            loginViewModel.showErrors = true
-                            loginViewModel.errorMessage = Validation().validateLogin(
-                                loginViewModel.emailInput,
-                                loginViewModel.passwordInput
+                        Column(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(24.dp),
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Text(
+                                text = "Welcome Back!",
+                                style = MaterialTheme.typography.headlineMedium,
+                                fontWeight = FontWeight.Bold,
+                                color = Color(0xFF2196F3)
                             )
-
-                            if (loginViewModel.errorMessage.isEmpty()) {
-                                if (selectedUser.isEmpty()) {
-                                    loginViewModel.errorMessage =
-                                        "Please select user type (Child or Parent)"
-                                } else if (selectedUser == "Parent") {
-                                    loginViewModel.authenticateParent() { success, error ->
-                                        if (success) {
-                                            navController.navigate(Routes.ParentDashboard(loginViewModel.emailInput)) {
-                                                popUpTo(Routes.Home) { inclusive = false }
-                                            }
-                                        } else {
-                                            loginViewModel.errorMessage = error
-                                        }
-                                    }
-                                } else if (selectedUser == "Child") {
-                                    loginViewModel.authenticateChild() { success, error ->
-                                        if (success) {
-
-                                        } else {
-                                            loginViewModel.errorMessage = error
-                                        }
-                                    }
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = "Sign in to continue",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Gray
+                            )
+                            Spacer(modifier = Modifier.height(32.dp))
+                            Text(
+                                text = "I am a:",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.SemiBold,
+                                modifier = Modifier.align(Alignment.Start)
+                            )
+                            Spacer(modifier = Modifier.height(12.dp))
+                            Row(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .selectableGroup(),
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                radioOptions.forEach { text ->
+                                    UserTypeCard(
+                                        text = text,
+                                        selected = text == selectedUser,
+                                        onClick = {
+                                            selectedUser = text
+                                            loginViewModel.selectedUserType = selectedUser
+                                        },
+                                        modifier = Modifier.weight(1f)
+                                    )
                                 }
                             }
-                        },
-                        modifier = Modifier.size(width = 200.dp, height = 50.dp),
-                        colors = androidx.compose.material3.ButtonDefaults.buttonColors(
-                            containerColor = Color(0xff62a3d1)
-                        )
-                    ) {
-                        Text(text = "Log In")
-                    }
-                }
-                item {
-                    Spacer(
-                        modifier = Modifier.padding(innerPadding)
-                    )
-                }
-                if (loginViewModel.showErrors && loginViewModel.errorMessage.isNotEmpty()) {
-                    item {
-                        Text(
-                            text = loginViewModel.errorMessage,
-                            color = MaterialTheme.colorScheme.error
-                        )
+                            Spacer(modifier = Modifier.height(24.dp))
+                            OutlinedTextField(
+                                value = loginViewModel.emailInput,
+                                onValueChange = { loginViewModel.emailInput = it },
+                                label = { Text("Email") },
+                                leadingIcon = {
+                                    Icon(Icons.Default.Email, contentDescription = null)
+                                },
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Email
+                                ),
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            OutlinedTextField(
+                                value = loginViewModel.passwordInput,
+                                onValueChange = { loginViewModel.passwordInput = it },
+                                label = { Text("Password") },
+                                leadingIcon = {
+                                    Icon(Icons.Default.Lock, contentDescription = null)
+                                },
+                                visualTransformation = PasswordVisualTransformation(),
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Password
+                                ),
+                                modifier = Modifier.fillMaxWidth(),
+                                singleLine = true,
+                                shape = RoundedCornerShape(12.dp)
+                            )
+                            Spacer(modifier = Modifier.height(24.dp))
+                            Button(
+                                onClick = {
+                                    // Commented out for testing
+//                                    loginViewModel.showErrors = true
+//                                    loginViewModel.errorMessage = Validation().validateLogin(
+//                                        loginViewModel.emailInput,
+//                                        loginViewModel.passwordInput
+//                                    )
+
+                                    if (loginViewModel.errorMessage.isEmpty()) {
+                                        if (selectedUser.isEmpty()) {
+                                            loginViewModel.errorMessage =
+                                                "Please select user type (Child or Parent)"
+                                        } else if (selectedUser == "Parent") {
+                                            loginViewModel.authenticateParent { success, error ->
+                                                if (success) {
+                                                    navController.navigate(Routes.ParentDashboard(loginViewModel.emailInput)) {
+                                                        popUpTo(Routes.Home) { inclusive = false }
+                                                    }
+                                                } else {
+                                                    loginViewModel.errorMessage = error
+                                                }
+                                            }
+                                        } else if (selectedUser == "Child") {
+                                            loginViewModel.authenticateChild { success, error ->
+                                                if (success) {
+                                                    navController.navigate(Routes.ChildDashboard(loginViewModel.emailInput)) {
+                                                        popUpTo(Routes.Home) { inclusive = false }
+                                                    }
+                                                } else {
+                                                    loginViewModel.errorMessage = error
+                                                }
+                                            }
+                                        }
+                                    }
+                                },
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(56.dp),
+                                colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color(0xFF2196F3)
+                                ),
+                                shape = RoundedCornerShape(12.dp)
+                            ) {
+                                Text(
+                                    text = "Log In",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
+                            }
+                            if (loginViewModel.showErrors && loginViewModel.errorMessage.isNotEmpty()) {
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Card(
+                                    modifier = Modifier.fillMaxWidth(),
+                                    colors = CardDefaults.cardColors(
+                                        containerColor = Color(0xFFFFEBEE)
+                                    ),
+                                    shape = RoundedCornerShape(8.dp)
+                                ) {
+                                    Text(
+                                        text = loginViewModel.errorMessage,
+                                        color = Color(0xFFD32F2F),
+                                        modifier = Modifier.padding(12.dp),
+                                        style = MaterialTheme.typography.bodyMedium
+                                    )
+                                }
+                            }
+                        }
                     }
                 }
             }
@@ -189,31 +226,48 @@ fun LoginScreen(
 }
 
 @Composable
-fun LoginEmailField(
-    labelText: String,
-    textInput: String,
-    onValueChange: (String) -> Unit,
+fun UserTypeCard(
+    text: String,
+    selected: Boolean,
+    onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    TextField(
-        value = textInput,
-        onValueChange = onValueChange,
-        label = { Text(labelText) },
-        modifier = modifier.padding(25.dp)
-    )
-}
-
-@Composable
-fun LoginPasswordField(
-    labelText: String,
-    textInput: String,
-    onValueChange: (String) -> Unit,
-    modifier: Modifier = Modifier
-) {
-    TextField(
-        value = textInput,
-        onValueChange = onValueChange,
-        label = { Text(labelText) },
-        modifier = modifier.padding(25.dp)
-    )
+    Card(
+        modifier = modifier
+            .selectable(
+                selected = selected,
+                onClick = onClick,
+                role = Role.RadioButton
+            ),
+        colors = CardDefaults.cardColors(
+            containerColor = if (selected) Color(0xFF2196F3) else Color(0xFFF5F5F5)
+        ),
+        shape = RoundedCornerShape(12.dp),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = if (selected) 4.dp else 0.dp
+        )
+    ) {
+        Column(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            RadioButton(
+                selected = selected,
+                onClick = null,
+                colors = RadioButtonDefaults.colors(
+                    selectedColor = Color.White,
+                    unselectedColor = Color.Gray
+                )
+            )
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = text,
+                fontSize = 16.sp,
+                fontWeight = FontWeight.Medium,
+                color = if (selected) Color.White else Color.Black
+            )
+        }
+    }
 }
