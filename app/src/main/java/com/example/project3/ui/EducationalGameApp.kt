@@ -23,6 +23,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
 import com.example.project3.ui.game.Level1Game1Screen
 import com.example.project3.ui.game.Level1Game2Screen
+import com.example.project3.ui.game.Level1Game3Screen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -128,6 +129,12 @@ fun EducationalGameApp() {
                         onUpClick = { navController.navigateUp() }
                     )
                     2 -> Level1Game2Screen(
+                        navController = navController,
+                        childEmail = args.childEmail,
+                        gameNumber = args.gameNumber,
+                        onUpClick = { navController.navigateUp() }
+                    )
+                    3 -> Level1Game3Screen(
                         navController = navController,
                         childEmail = args.childEmail,
                         gameNumber = args.gameNumber,

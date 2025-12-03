@@ -48,8 +48,8 @@ fun ChildDashboardScreen(
     val gameLevels = remember {
         listOf(
             GameLevel(1, 1, "Level 1 - Game 1", "Learn basic movements: Up, Down, Right"),
-            GameLevel(1, 2, "Level 1 - Game 2", "Navigate a simple maze"),
-            GameLevel(1, 3, "Level 1 - Game 3", "Find the shortest path"),
+            GameLevel(1, 2, "Level 1 - Game 2", "Follow the path"),
+            GameLevel(1, 3, "Level 1 - Game 3", "Escape the maze"),
         )
     }
 
