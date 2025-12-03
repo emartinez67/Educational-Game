@@ -345,8 +345,7 @@ fun Level1Game2Screen(
             }
             item {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    modifier = Modifier.fillMaxWidth()
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
                 ) {
                     GameCommands.LEVEL_1_COMMANDS.forEach { command ->
                         DraggableCommand(
@@ -363,7 +362,6 @@ fun Level1Game2Screen(
             item {
                 Spacer(modifier = Modifier.height(24.dp))
             }
-
             if (errorMessage.isNotEmpty()) {
                 item {
                     Card(
@@ -384,7 +382,6 @@ fun Level1Game2Screen(
                     }
                 }
             }
-
             item {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
