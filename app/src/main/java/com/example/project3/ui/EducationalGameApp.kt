@@ -1,5 +1,7 @@
 package com.example.project3.ui
 
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -11,6 +13,9 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
@@ -143,17 +148,35 @@ fun EducationalGameAppBar(
     modifier: Modifier = Modifier,
     canNavigateBack: Boolean = false,
     onUpClick: () -> Unit = { },
+    title: String = ""
 ) {
     TopAppBar(
-        title = { Text("") },
+        title = {
+            if (title.isNotEmpty()) {
+                Text(
+                    text = title,
+                    fontWeight = FontWeight.Bold,
+                    color = Color.White
+                )
+            }
+        },
         colors = TopAppBarDefaults.topAppBarColors(
-            containerColor = MaterialTheme.colorScheme.primaryContainer
+            containerColor = Color(0xFF2196F3)
         ),
         modifier = modifier,
         navigationIcon = {
             if (canNavigateBack) {
-                IconButton(onClick = onUpClick) {
-                    Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
+                IconButton(
+                    onClick = onUpClick,
+                    modifier = Modifier
+                        .padding(8.dp)
+                        .size(40.dp)
+                ) {
+                    Icon(
+                        Icons.AutoMirrored.Filled.ArrowBack,
+                        contentDescription = "Back",
+                        tint = Color.White
+                    )
                 }
             }
         }
