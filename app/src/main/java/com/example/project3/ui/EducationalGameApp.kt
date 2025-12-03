@@ -15,6 +15,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
+import com.example.project3.ui.game.GameScreenLevel1
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -36,6 +37,12 @@ sealed class Routes {
 
     @Serializable
     data class ChildProgress(val childEmail: String)
+
+    @Serializable
+    data class ChildDashboard(val childEmail: String)
+
+    @Serializable
+    data class GameLevel(val childEmail: String, val level: Int, val gameNumber: Int)
 }
 
 @Composable
@@ -99,6 +106,31 @@ fun EducationalGameApp() {
                 childEmail = args.childEmail,
                 onUpClick = {
                     navController.navigateUp()
+                }
+            )
+        }
+
+        composable<Routes.GameLevel> { backStackEntry ->
+            val args = backStackEntry.toRoute<Routes.GameLevel>()
+            if (args.level == 1) {
+                GameScreenLevel1(
+                    navController = navController,
+                    childEmail = args.childEmail,
+                    gameNumber = args.gameNumber,
+                    onUpClick = { navController.navigateUp() }
+                )
+            }
+        }
+
+        composable<Routes.ChildDashboard> { backStackEntry ->
+            val args = backStackEntry.toRoute<Routes.ChildDashboard>()
+            ChildDashboardScreen(
+                navController = navController,
+                childEmail = args.childEmail,
+                onUpClick = {
+                    navController.navigate(Routes.Home) {
+                        popUpTo(Routes.Home) { inclusive = false }
+                    }
                 }
             )
         }

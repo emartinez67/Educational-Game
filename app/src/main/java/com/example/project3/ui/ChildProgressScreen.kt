@@ -45,7 +45,6 @@ fun ChildProgressScreen(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
-
             item {
                 Text(
                     text = "${childProgressViewModel.childFirstName} ${childProgressViewModel.childLastName}",
@@ -53,7 +52,6 @@ fun ChildProgressScreen(
                     modifier = Modifier.padding(bottom = 24.dp)
                 )
             }
-
             item {
                 Card(
                     modifier = Modifier
@@ -83,7 +81,6 @@ fun ChildProgressScreen(
                     }
                 }
             }
-
             item {
                 Card(
                     modifier = Modifier
@@ -118,7 +115,6 @@ fun ChildProgressScreen(
                     }
                 }
             }
-
             item {
                 Card(
                     modifier = Modifier
