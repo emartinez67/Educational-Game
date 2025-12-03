@@ -36,12 +36,12 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.ui.text.font.FontWeight
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GameScreenLevel1(
+fun Level1Game2Screen(
     navController: NavController,
     childEmail: String,
     gameNumber: Int,
@@ -51,15 +51,53 @@ fun GameScreenLevel1(
     onUpClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    var playerPosition by remember { mutableStateOf(Pair(0, 0)) } // x, y grid position
-    var targetPosition by remember { mutableStateOf(Pair(4, 4)) }
+    var playerPosition by remember { mutableStateOf(Pair(0, 0)) }
+    val targetPosition = Pair(7, 7) // Bottom right corner
     var commandSequence by remember { mutableStateOf(listOf<CommandType>()) }
     var isAnimating by remember { mutableStateOf(false) }
     var gameCompleted by remember { mutableStateOf(false) }
     var attempts by remember { mutableStateOf(0) }
     var score by remember { mutableStateOf(0) }
+    var errorMessage by remember { mutableStateOf("") }
 
     val coroutineScope = rememberCoroutineScope()
+
+    // Define the valid path - only these positions are accessible
+    val validPath = setOf(
+        Pair(0, 0), // Start
+        Pair(1, 0),
+        Pair(2, 0),
+        Pair(3, 0),
+        Pair(3, 1),
+        Pair(3, 2),
+        Pair(3, 3),
+        Pair(4, 3),
+        Pair(5, 3),
+        Pair(5, 4),
+        Pair(5, 5),
+        Pair(6, 5),
+        Pair(7, 5),
+        Pair(7, 6),
+        Pair(7, 7)  // End
+    )
+
+    // The correct sequence to reach the target
+    val correctSequence = listOf(
+        CommandType.MOVE_RIGHT,
+        CommandType.MOVE_RIGHT,
+        CommandType.MOVE_RIGHT,
+        CommandType.MOVE_DOWN,
+        CommandType.MOVE_DOWN,
+        CommandType.MOVE_DOWN,
+        CommandType.MOVE_RIGHT,
+        CommandType.MOVE_RIGHT,
+        CommandType.MOVE_DOWN,
+        CommandType.MOVE_DOWN,
+        CommandType.MOVE_RIGHT,
+        CommandType.MOVE_RIGHT,
+        CommandType.MOVE_DOWN,
+        CommandType.MOVE_DOWN
+    )
 
     val animatedOffsetX by animateFloatAsState(
         targetValue = playerPosition.first.toFloat(),
@@ -73,9 +111,25 @@ fun GameScreenLevel1(
         label = "playerY"
     )
 
-    fun executeCommands() {
+    fun validateAndExecuteCommands() {
         if (isAnimating || commandSequence.isEmpty()) return
 
+        errorMessage = ""
+
+        // Check if the command sequence matches the correct sequence
+        if (commandSequence != correctSequence) {
+            errorMessage = "❌ Incorrect path! Try again."
+            attempts++
+            try {
+                val mediaPlayer = MediaPlayer.create(context, R.raw.fail_sound)
+                mediaPlayer?.start()
+                mediaPlayer?.setOnCompletionListener { it.release() }
+            } catch (e: Exception) {
+            }
+            return
+        }
+
+        // If correct, execute the commands
         isAnimating = true
         attempts++
         var currentPos = Pair(0, 0)
@@ -85,8 +139,8 @@ fun GameScreenLevel1(
                 delay(600)
                 currentPos = when (command) {
                     CommandType.MOVE_UP -> Pair(currentPos.first, maxOf(0, currentPos.second - 1))
-                    CommandType.MOVE_DOWN -> Pair(currentPos.first, minOf(4, currentPos.second + 1))
-                    CommandType.MOVE_RIGHT -> Pair(minOf(4, currentPos.first + 1), currentPos.second)
+                    CommandType.MOVE_DOWN -> Pair(currentPos.first, minOf(7, currentPos.second + 1))
+                    CommandType.MOVE_RIGHT -> Pair(minOf(7, currentPos.first + 1), currentPos.second)
                     else -> currentPos
                 }
                 playerPosition = currentPos
@@ -119,13 +173,6 @@ fun GameScreenLevel1(
                     mediaPlayer?.setOnCompletionListener { it.release() }
                 } catch (e: Exception) {
                 }
-            } else {
-                try {
-                    val mediaPlayer = MediaPlayer.create(context, R.raw.fail_sound)
-                    mediaPlayer?.start()
-                    mediaPlayer?.setOnCompletionListener { it.release() }
-                } catch (e: Exception) {
-                }
             }
 
             isAnimating = false
@@ -137,12 +184,13 @@ fun GameScreenLevel1(
         commandSequence = emptyList()
         gameCompleted = false
         isAnimating = false
+        errorMessage = ""
     }
 
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Level 1 - Game $gameNumber") },
+                title = { Text("Level 1 - Game 2: Maze Path") },
                 navigationIcon = {
                     IconButton(onClick = onUpClick) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, "Back")
@@ -160,65 +208,85 @@ fun GameScreenLevel1(
         ) {
             item {
                 Text(
-                    text = "Help the character reach the star!",
+                    text = "Follow the only valid path to reach the star!",
                     style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(bottom = 8.dp)
+                )
+                Text(
+                    text = "Gray squares are blocked - find the correct route",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = Color.Gray,
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
             }
             item {
                 Box(
                     modifier = Modifier
-                        .size(300.dp)
+                        .size(320.dp)
                         .background(Color(0xFFE8F5E9), RoundedCornerShape(8.dp))
                         .border(2.dp, Color(0xFF4CAF50), RoundedCornerShape(8.dp))
                 ) {
-                    for (row in 0..4) {
-                        for (col in 0..4) {
+                    // Draw grid cells
+                    for (row in 0..7) {
+                        for (col in 0..7) {
+                            val isValidCell = validPath.contains(Pair(col, row))
                             Box(
                                 modifier = Modifier
                                     .offset {
                                         IntOffset(
-                                            (col * 60).dp.roundToPx(),
-                                            (row * 60).dp.roundToPx()
+                                            (col * 40).dp.roundToPx(),
+                                            (row * 40).dp.roundToPx()
                                         )
                                     }
-                                    .size(60.dp)
-                                    .border(1.dp, Color.Gray.copy(alpha = 0.3f))
+                                    .size(40.dp)
+                                    .background(
+                                        if (isValidCell) Color.Transparent
+                                        else Color.Gray.copy(alpha = 0.6f)
+                                    )
+                                    .border(
+                                        1.dp,
+                                        if (isValidCell) Color.Gray.copy(alpha = 0.3f)
+                                        else Color.Gray.copy(alpha = 0.8f)
+                                    )
                             )
                         }
                     }
+
+                    // Draw star at target position
                     Icon(
                         Icons.Default.Star,
                         contentDescription = "Target",
                         modifier = Modifier
                             .offset {
                                 IntOffset(
-                                    (targetPosition.first * 60 + 15).dp.roundToPx(),
-                                    (targetPosition.second * 60 + 15).dp.roundToPx()
+                                    (targetPosition.first * 40 + 10).dp.roundToPx(),
+                                    (targetPosition.second * 40 + 10).dp.roundToPx()
                                 )
                             }
-                            .size(30.dp)
+                            .size(20.dp)
                             .then(
                                 if (gameCompleted) Modifier
-                                    .offset(y = (-5).dp)
+                                    .offset(y = (-3).dp)
                                 else Modifier
                             ),
                         tint = Color(0xFFFFC107)
                     )
+
+                    // Draw player
                     Box(
                         modifier = Modifier
                             .offset {
                                 IntOffset(
-                                    (animatedOffsetX * 60 + 15).dp.roundToPx(),
-                                    (animatedOffsetY * 60 + 15).dp.roundToPx()
+                                    (animatedOffsetX * 40 + 10).dp.roundToPx(),
+                                    (animatedOffsetY * 40 + 10).dp.roundToPx()
                                 )
                             }
-                            .size(30.dp)
+                            .size(20.dp)
                             .clip(CircleShape)
                             .background(Color(0xFF2196F3)),
                         contentAlignment = Alignment.Center
                     ) {
-                        Text("😊", fontSize = 20.sp)
+                        Text("😊", fontSize = 14.sp)
                     }
                 }
             }
@@ -229,6 +297,7 @@ fun GameScreenLevel1(
                 Text(
                     text = "Command Sequence:",
                     style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
@@ -276,6 +345,7 @@ fun GameScreenLevel1(
                 Text(
                     text = "Available Commands:",
                     style = MaterialTheme.typography.titleSmall,
+                    fontWeight = FontWeight.SemiBold,
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
@@ -298,12 +368,35 @@ fun GameScreenLevel1(
             item {
                 Spacer(modifier = Modifier.height(24.dp))
             }
+
+            // Error message
+            if (errorMessage.isNotEmpty()) {
+                item {
+                    Card(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 16.dp),
+                        colors = CardDefaults.cardColors(
+                            containerColor = Color(0xFFFFEBEE)
+                        )
+                    ) {
+                        Text(
+                            text = errorMessage,
+                            color = Color(0xFFD32F2F),
+                            modifier = Modifier.padding(16.dp),
+                            style = MaterialTheme.typography.bodyMedium,
+                            fontWeight = FontWeight.Medium
+                        )
+                    }
+                }
+            }
+
             item {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
                 ) {
                     Button(
-                        onClick = { executeCommands() },
+                        onClick = { validateAndExecuteCommands() },
                         enabled = !isAnimating && commandSequence.isNotEmpty() && !gameCompleted,
                         colors = ButtonDefaults.buttonColors(
                             containerColor = Color(0xFF4CAF50)
@@ -343,74 +436,11 @@ fun GameScreenLevel1(
                         Text("Attempts: $attempts")
                         if (gameCompleted) {
                             Text("Score: $score", color = Color(0xFF4CAF50))
-                            Text("🎉 Success! Great job!", color = Color(0xFF4CAF50))
+                            Text("🎉 Perfect! You found the path!", color = Color(0xFF4CAF50))
                         }
                     }
                 }
             }
         }
-    }
-}
-
-@Composable
-fun DraggableCommand(
-    command: GameCommand,
-    onDragEnd: (Boolean) -> Unit
-) {
-    var dragOffset by remember { mutableStateOf(Offset.Zero) }
-
-    Box(
-        modifier = Modifier
-            .offset { IntOffset(dragOffset.x.roundToInt(), dragOffset.y.roundToInt()) }
-            .size(70.dp)
-            .clip(RoundedCornerShape(12.dp))
-            .background(command.color)
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDragEnd = {
-                        onDragEnd(dragOffset.y < -100)
-                        dragOffset = Offset.Zero
-                    },
-                    onDrag = { change, dragAmount ->
-                        change.consume()
-                        dragOffset += dragAmount
-                    }
-                )
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            command.label,
-            color = Color.White,
-            fontSize = 32.sp,
-            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
-        )
-    }
-}
-
-@Composable
-fun CommandChip(
-    command: GameCommand,
-    onRemove: () -> Unit
-) {
-    Box(
-        modifier = Modifier
-            .size(60.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .background(command.color)
-            .pointerInput(Unit) {
-                detectDragGestures(
-                    onDragEnd = { onRemove() },
-                    onDrag = { _, _ -> }
-                )
-            },
-        contentAlignment = Alignment.Center
-    ) {
-        Text(
-            command.label,
-            color = Color.White,
-            fontSize = 28.sp,
-            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
-        )
     }
 }

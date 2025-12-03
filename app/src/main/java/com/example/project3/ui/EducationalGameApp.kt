@@ -13,6 +13,7 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -20,7 +21,8 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.toRoute
-import com.example.project3.ui.game.GameScreenLevel1
+import com.example.project3.ui.game.Level1Game1Screen
+import com.example.project3.ui.game.Level1Game2Screen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -118,12 +120,26 @@ fun EducationalGameApp() {
         composable<Routes.GameLevel> { backStackEntry ->
             val args = backStackEntry.toRoute<Routes.GameLevel>()
             if (args.level == 1) {
-                GameScreenLevel1(
-                    navController = navController,
-                    childEmail = args.childEmail,
-                    gameNumber = args.gameNumber,
-                    onUpClick = { navController.navigateUp() }
-                )
+                when (args.gameNumber) {
+                    1 -> Level1Game1Screen(
+                        navController = navController,
+                        childEmail = args.childEmail,
+                        gameNumber = args.gameNumber,
+                        onUpClick = { navController.navigateUp() }
+                    )
+                    2 -> Level1Game2Screen(
+                        navController = navController,
+                        childEmail = args.childEmail,
+                        gameNumber = args.gameNumber,
+                        onUpClick = { navController.navigateUp() }
+                    )
+                    else -> Level1Game1Screen(
+                        navController = navController,
+                        childEmail = args.childEmail,
+                        gameNumber = args.gameNumber,
+                        onUpClick = { navController.navigateUp() }
+                    )
+                }
             }
         }
 
@@ -163,7 +179,7 @@ fun EducationalGameAppBar(
         colors = TopAppBarDefaults.topAppBarColors(
             containerColor = Color(0xFF2196F3)
         ),
-        modifier = modifier,
+        modifier = modifier.shadow(4.dp),
         navigationIcon = {
             if (canNavigateBack) {
                 IconButton(
