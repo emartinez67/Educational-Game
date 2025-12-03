@@ -52,7 +52,7 @@ fun Level1Game2Screen(
 ) {
     val context = LocalContext.current
     var playerPosition by remember { mutableStateOf(Pair(0, 0)) }
-    val targetPosition = Pair(7, 7) // Bottom right corner
+    val targetPosition = Pair(7, 7)
     var commandSequence by remember { mutableStateOf(listOf<CommandType>()) }
     var isAnimating by remember { mutableStateOf(false) }
     var gameCompleted by remember { mutableStateOf(false) }
@@ -62,9 +62,8 @@ fun Level1Game2Screen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    // Define the valid path - only these positions are accessible
     val validPath = setOf(
-        Pair(0, 0), // Start
+        Pair(0, 0),
         Pair(1, 0),
         Pair(2, 0),
         Pair(3, 0),
@@ -78,10 +77,9 @@ fun Level1Game2Screen(
         Pair(6, 5),
         Pair(7, 5),
         Pair(7, 6),
-        Pair(7, 7)  // End
+        Pair(7, 7)
     )
 
-    // The correct sequence to reach the target
     val correctSequence = listOf(
         CommandType.MOVE_RIGHT,
         CommandType.MOVE_RIGHT,
@@ -116,7 +114,6 @@ fun Level1Game2Screen(
 
         errorMessage = ""
 
-        // Check if the command sequence matches the correct sequence
         if (commandSequence != correctSequence) {
             errorMessage = "❌ Incorrect path! Try again."
             attempts++
@@ -129,7 +126,6 @@ fun Level1Game2Screen(
             return
         }
 
-        // If correct, execute the commands
         isAnimating = true
         attempts++
         var currentPos = Pair(0, 0)
@@ -141,6 +137,7 @@ fun Level1Game2Screen(
                     CommandType.MOVE_UP -> Pair(currentPos.first, maxOf(0, currentPos.second - 1))
                     CommandType.MOVE_DOWN -> Pair(currentPos.first, minOf(7, currentPos.second + 1))
                     CommandType.MOVE_RIGHT -> Pair(minOf(7, currentPos.first + 1), currentPos.second)
+                    CommandType.MOVE_LEFT -> Pair(maxOf(0, currentPos.first - 1), currentPos.second)
                     else -> currentPos
                 }
                 playerPosition = currentPos
@@ -226,7 +223,6 @@ fun Level1Game2Screen(
                         .background(Color(0xFFE8F5E9), RoundedCornerShape(8.dp))
                         .border(2.dp, Color(0xFF4CAF50), RoundedCornerShape(8.dp))
                 ) {
-                    // Draw grid cells
                     for (row in 0..7) {
                         for (col in 0..7) {
                             val isValidCell = validPath.contains(Pair(col, row))
@@ -252,7 +248,6 @@ fun Level1Game2Screen(
                         }
                     }
 
-                    // Draw star at target position
                     Icon(
                         Icons.Default.Star,
                         contentDescription = "Target",
@@ -272,7 +267,6 @@ fun Level1Game2Screen(
                         tint = Color(0xFFFFC107)
                     )
 
-                    // Draw player
                     Box(
                         modifier = Modifier
                             .offset {
@@ -351,7 +345,8 @@ fun Level1Game2Screen(
             }
             item {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    modifier = Modifier.fillMaxWidth()
                 ) {
                     GameCommands.LEVEL_1_COMMANDS.forEach { command ->
                         DraggableCommand(
@@ -369,7 +364,6 @@ fun Level1Game2Screen(
                 Spacer(modifier = Modifier.height(24.dp))
             }
 
-            // Error message
             if (errorMessage.isNotEmpty()) {
                 item {
                     Card(

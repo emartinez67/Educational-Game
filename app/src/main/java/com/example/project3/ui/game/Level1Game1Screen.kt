@@ -50,7 +50,7 @@ fun Level1Game1Screen(
     onUpClick: () -> Unit = {}
 ) {
     val context = LocalContext.current
-    var playerPosition by remember { mutableStateOf(Pair(0, 0)) } // x, y grid position
+    var playerPosition by remember { mutableStateOf(Pair(0, 0)) }
     var targetPosition by remember { mutableStateOf(Pair(4, 4)) }
     var commandSequence by remember { mutableStateOf(listOf<CommandType>()) }
     var isAnimating by remember { mutableStateOf(false) }
@@ -86,6 +86,7 @@ fun Level1Game1Screen(
                     CommandType.MOVE_UP -> Pair(currentPos.first, maxOf(0, currentPos.second - 1))
                     CommandType.MOVE_DOWN -> Pair(currentPos.first, minOf(4, currentPos.second + 1))
                     CommandType.MOVE_RIGHT -> Pair(minOf(4, currentPos.first + 1), currentPos.second)
+                    CommandType.MOVE_LEFT -> Pair(maxOf(0, currentPos.first - 1), currentPos.second)
                     else -> currentPos
                 }
                 playerPosition = currentPos
@@ -280,7 +281,9 @@ fun Level1Game1Screen(
             }
             item {
                 Row(
-                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                    horizontalArrangement = Arrangement.spacedBy(12.dp),
+                    modifier = Modifier.fillMaxWidth(),
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
                     GameCommands.LEVEL_1_COMMANDS.forEach { command ->
                         DraggableCommand(

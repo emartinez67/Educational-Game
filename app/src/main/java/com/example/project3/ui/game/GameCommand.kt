@@ -22,6 +22,7 @@ object GameCommands {
     val LEVEL_1_COMMANDS = listOf(
         GameCommand(CommandType.MOVE_UP, "↑", Color(0xFF4CAF50)),
         GameCommand(CommandType.MOVE_DOWN, "↓", Color(0xFF2196F3)),
+        GameCommand(CommandType.MOVE_LEFT, "←", Color(0xFFE91E63)),
         GameCommand(CommandType.MOVE_RIGHT, "→", Color(0xFFFFC107))
     )
 }
