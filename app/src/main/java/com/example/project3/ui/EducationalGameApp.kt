@@ -25,6 +25,7 @@ import com.example.project3.ui.game.Level1Game1Screen
 import com.example.project3.ui.game.Level1Game2Screen
 import com.example.project3.ui.game.Level1Game3Screen
 import com.example.project3.ui.game.Level2Game1Screen
+import com.example.project3.ui.game.Level2Game2Screen
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -157,12 +158,12 @@ fun EducationalGameApp() {
                         gameNumber = args.gameNumber,
                         onUpClick = { navController.navigateUp() }
                     )
-//                    2 -> Level2Game2Screen(
-//                        navController = navController,
-//                        childEmail = args.childEmail,
-//                        gameNumber = args.gameNumber,
-//                        onUpClick = { navController.navigateUp() }
-//                        )
+                    2 -> Level2Game2Screen(
+                        navController = navController,
+                        childEmail = args.childEmail,
+                        gameNumber = args.gameNumber,
+                        onUpClick = { navController.navigateUp() }
+                        )
 //                    3 -> Level2Game3Screen(
 //                        navController = navController,
 //                        childEmail = args.childEmail,
