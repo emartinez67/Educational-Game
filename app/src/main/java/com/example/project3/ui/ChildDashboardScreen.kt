@@ -45,13 +45,16 @@ fun ChildDashboardScreen(
         childDashboardViewModel.loadChildData(childEmail)
     }
 
-    val gameLevels = remember {
-        listOf(
-            GameLevel(1, 1, "Level 1 - Game 1", "Learn basic movements: Up, Down, Right"),
-            GameLevel(1, 2, "Level 1 - Game 2", "Follow the path"),
-            GameLevel(1, 3, "Level 1 - Game 3", "Escape the maze"),
-        )
-    }
+    val gameLevels = remember(childDashboardViewModel.isLevel2Unlocked) {
+                listOf(
+                    GameLevel(1, 1, "Level 1 - Game 1", "Learn basic movements: Up, Down, Right"),
+                    GameLevel(1, 2, "Level 1 - Game 2", "Follow the path"),
+                    GameLevel(1, 3, "Level 1 - Game 3", "Escape the maze"),
+                    GameLevel(2, 1, "Level 2 - Game 1", "Master loops for efficiency", !childDashboardViewModel.isLevel2Unlocked),
+                    GameLevel(2, 2, "Level 2 - Game 2", "Navigate complex patterns", !childDashboardViewModel.isLevel2Unlocked),
+                    GameLevel(2, 3, "Level 2 - Game 3", "Use functions like a pro", !childDashboardViewModel.isLevel2Unlocked),
+               )
+            }
 
     Scaffold(
         topBar = {
