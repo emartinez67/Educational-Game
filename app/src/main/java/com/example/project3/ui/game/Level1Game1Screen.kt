@@ -385,7 +385,7 @@ fun DraggableCommand(
             command.label,
             color = Color.White,
             fontSize = 32.sp,
-            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+            fontWeight = FontWeight.Bold
         )
     }
 }
@@ -412,7 +412,7 @@ fun CommandChip(
             command.label,
             color = Color.White,
             fontSize = 28.sp,
-            fontWeight = androidx.compose.ui.text.font.FontWeight.Bold
+            fontWeight = FontWeight.Bold
         )
     }
 }

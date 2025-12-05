@@ -63,7 +63,6 @@ fun Level2Game2Screen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    // Staircase pattern: needs loops and smart thinking
     val validPath = mutableSetOf<Pair<Int, Int>>()
     for (i in 0..10) {
         for (j in 0..i) {
@@ -259,7 +258,6 @@ fun Level2Game2Screen(
                     }
                 }
             }
-
             item {
                 Text(
                     text = "Climb to the top efficiently!",
@@ -267,7 +265,6 @@ fun Level2Game2Screen(
                     modifier = Modifier.padding(bottom = 16.dp)
                 )
             }
-
             item {
                 Box(
                     modifier = Modifier
@@ -332,11 +329,9 @@ fun Level2Game2Screen(
                     }
                 }
             }
-
             item {
                 Spacer(modifier = Modifier.height(24.dp))
             }
-
             item {
                 Text(
                     text = "Command Sequence:",
@@ -345,7 +340,6 @@ fun Level2Game2Screen(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
-
             item {
                 Box(
                     modifier = Modifier
@@ -382,11 +376,9 @@ fun Level2Game2Screen(
                     }
                 }
             }
-
             item {
                 Spacer(modifier = Modifier.height(16.dp))
             }
-
             item {
                 Text(
                     text = "Available Commands:",
@@ -395,7 +387,6 @@ fun Level2Game2Screen(
                     modifier = Modifier.padding(bottom = 8.dp)
                 )
             }
-
             item {
                 Column(
                     verticalArrangement = Arrangement.spacedBy(12.dp)
@@ -430,11 +421,9 @@ fun Level2Game2Screen(
                     }
                 }
             }
-
             item {
                 Spacer(modifier = Modifier.height(16.dp))
             }
-
             item {
                 TextButton(
                     onClick = { showHint = !showHint }
@@ -442,7 +431,6 @@ fun Level2Game2Screen(
                     Text(if (showHint) "Hide Hint 👁️" else "Show Hint 💡")
                 }
             }
-
             if (showHint) {
                 item {
                     Card(
@@ -461,7 +449,6 @@ fun Level2Game2Screen(
                     }
                 }
             }
-
             if (errorMessage.isNotEmpty()) {
                 item {
                     Card(
@@ -482,7 +469,6 @@ fun Level2Game2Screen(
                     }
                 }
             }
-
             item {
                 Row(
                     horizontalArrangement = Arrangement.spacedBy(16.dp)
@@ -512,11 +498,9 @@ fun Level2Game2Screen(
                     }
                 }
             }
-
             item {
                 Spacer(modifier = Modifier.height(16.dp))
             }
-
             item {
                 Card(
                     modifier = Modifier.fillMaxWidth(),
