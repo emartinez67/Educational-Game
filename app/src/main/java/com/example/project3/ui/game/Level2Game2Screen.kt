@@ -163,7 +163,7 @@ fun Level2Game2Screen(
 
             if (!pathValid) {
                 try {
-                    val mediaPlayer = MediaPlayer.create(context, R.raw.fail_sound)
+                    val mediaPlayer = MediaPlayer.create(context, R.raw.error_sound)
                     mediaPlayer?.start()
                     mediaPlayer?.setOnCompletionListener { it.release() }
                 } catch (e: Exception) {
@@ -194,7 +194,7 @@ fun Level2Game2Screen(
             } else {
                 errorMessage = "❌ Didn't reach the target. Try again!"
                 try {
-                    val mediaPlayer = MediaPlayer.create(context, R.raw.fail_sound)
+                    val mediaPlayer = MediaPlayer.create(context, R.raw.error_sound)
                     mediaPlayer?.start()
                     mediaPlayer?.setOnCompletionListener { it.release() }
                 } catch (e: Exception) {

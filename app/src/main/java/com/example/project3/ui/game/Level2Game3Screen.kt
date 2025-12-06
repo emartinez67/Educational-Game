@@ -218,7 +218,7 @@ fun Level2Game3Screen(
             } else {
                 errorMessage = "❌ Collected ${collectedStars.size}/${stars.size} stars. Collect all stars!"
                 try {
-                    val mediaPlayer = MediaPlayer.create(context, R.raw.fail_sound)
+                    val mediaPlayer = MediaPlayer.create(context, R.raw.error_sound)
                     mediaPlayer?.start()
                     mediaPlayer?.setOnCompletionListener { it.release() }
                 } catch (e: Exception) {

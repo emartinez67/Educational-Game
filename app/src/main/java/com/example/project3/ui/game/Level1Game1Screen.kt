@@ -122,7 +122,7 @@ fun Level1Game1Screen(
                 }
             } else {
                 try {
-                    val mediaPlayer = MediaPlayer.create(context, R.raw.fail_sound)
+                    val mediaPlayer = MediaPlayer.create(context, R.raw.error_sound)
                     mediaPlayer?.start()
                     mediaPlayer?.setOnCompletionListener { it.release() }
                 } catch (e: Exception) {

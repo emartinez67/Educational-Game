@@ -131,7 +131,7 @@ fun Level1Game3Screen(
             errorMessage = "❌ Incorrect path! Try again."
             attempts++
             try {
-                val mediaPlayer = MediaPlayer.create(context, R.raw.fail_sound)
+                val mediaPlayer = MediaPlayer.create(context, R.raw.error_sound)
                 mediaPlayer?.start()
                 mediaPlayer?.setOnCompletionListener { it.release() }
             } catch (e: Exception) {

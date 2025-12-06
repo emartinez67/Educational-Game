@@ -184,7 +184,7 @@ fun Level2Game1Screen(
             } else {
                 errorMessage = "❌ Didn't reach the target. Try again!"
                 try {
-                    val mediaPlayer = MediaPlayer.create(context, R.raw.fail_sound)
+                    val mediaPlayer = MediaPlayer.create(context, R.raw.error_sound)
                     mediaPlayer?.start()
                     mediaPlayer?.setOnCompletionListener { it.release() }
                 } catch (e: Exception) {
