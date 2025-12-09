@@ -23,6 +23,9 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 
+/**
+ * Screen for parent dashboard that shows all of their children
+ */
 @Composable
 fun ParentDashboardScreen(
     navController: NavController,

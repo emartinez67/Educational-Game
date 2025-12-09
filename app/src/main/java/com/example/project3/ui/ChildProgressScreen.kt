@@ -22,6 +22,9 @@ import com.github.mikephil.charting.data.*
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 
+/**
+ * Screen to show a specific child's progress
+ */
 @Composable
 fun ChildProgressScreen(
     navController: NavController,

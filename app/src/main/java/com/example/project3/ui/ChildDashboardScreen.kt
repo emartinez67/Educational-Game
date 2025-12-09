@@ -31,6 +31,9 @@ data class GameLevel(
     val isLocked: Boolean = false
 )
 
+/**
+ * Screen for child dashboard that shows all available games
+ */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ChildDashboardScreen(
