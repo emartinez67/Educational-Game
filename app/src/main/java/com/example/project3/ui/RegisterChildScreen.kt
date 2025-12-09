@@ -6,6 +6,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -18,6 +20,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
+import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -33,6 +36,8 @@ fun RegisterChildScreen(
     ),
     onUpClick: () -> Unit = { }
 ) {
+    var passwordVisible by remember { mutableStateOf(false) }
+
     LaunchedEffect(parentEmail) {
         registerChildViewModel.loadParentId(parentEmail)
     }
@@ -154,7 +159,29 @@ fun RegisterChildScreen(
                                 leadingIcon = {
                                     Icon(Icons.Default.Lock, contentDescription = null)
                                 },
-                                visualTransformation = PasswordVisualTransformation(),
+                                visualTransformation = if (passwordVisible) {
+                                    VisualTransformation.None
+                                }
+                                else {
+                                    PasswordVisualTransformation()
+                                },
+                                trailingIcon = {
+                                    IconButton(onClick = { passwordVisible = !passwordVisible }) {
+                                        Icon(
+                                            imageVector = if (passwordVisible) {
+                                                Icons.Default.Close
+                                            } else {
+                                                Icons.Default.Check
+                                            },
+                                            contentDescription = if (passwordVisible) {
+                                                "Hide password"
+                                            } else {
+                                                "Show password"
+                                            },
+                                            tint = Color.Gray
+                                        )
+                                    }
+                                },
                                 keyboardOptions = KeyboardOptions(
                                     keyboardType = KeyboardType.Password
                                 ),
