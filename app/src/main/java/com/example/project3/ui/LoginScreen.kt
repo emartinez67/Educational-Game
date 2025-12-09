@@ -188,12 +188,11 @@ fun LoginScreen(
                         Spacer(modifier = Modifier.height(24.dp))
                         Button(
                             onClick = {
-                                // Commented out for testing
-//                                    loginViewModel.showErrors = true
-//                                    loginViewModel.errorMessage = Validation().validateLogin(
-//                                        loginViewModel.emailInput,
-//                                        loginViewModel.passwordInput
-//                                    )
+                                loginViewModel.showErrors = true
+                                loginViewModel.errorMessage = Validation().validateLogin(
+                                    loginViewModel.emailInput,
+                                    loginViewModel.passwordInput
+                                )
 
                                 if (loginViewModel.errorMessage.isEmpty()) {
                                     if (selectedUser.isEmpty()) {

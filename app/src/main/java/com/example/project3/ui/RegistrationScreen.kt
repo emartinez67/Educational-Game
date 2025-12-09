@@ -212,14 +212,13 @@ fun RegistrationScreen(
                             Spacer(modifier = Modifier.height(24.dp))
                             Button(
                                 onClick = {
-                                    // Commented out for testing
-//                                    registrationViewModel.showErrors = true
-//                                    registrationViewModel.errorMessage = Validation().validateRegistration(
-//                                        registrationViewModel.firstNameInput,
-//                                        registrationViewModel.lastNameInput,
-//                                        registrationViewModel.emailInput,
-//                                        registrationViewModel.passwordInput
-//                                    )
+                                    registrationViewModel.showErrors = true
+                                    registrationViewModel.errorMessage = Validation().validateRegistration(
+                                        registrationViewModel.firstNameInput,
+                                        registrationViewModel.lastNameInput,
+                                        registrationViewModel.emailInput,
+                                        registrationViewModel.passwordInput
+                                    )
 
                                     if (registrationViewModel.errorMessage.isEmpty()) {
                                         registrationViewModel.registerParent(

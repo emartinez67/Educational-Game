@@ -218,14 +218,13 @@ fun RegisterChildScreen(
                             Spacer(modifier = Modifier.height(24.dp))
                             Button(
                                 onClick = {
-                                    // Commented out for testing
-//                                    registerChildViewModel.showErrors = true
-//                                    registerChildViewModel.errorMessage = Validation().validateRegistration(
-//                                        registerChildViewModel.firstNameInput,
-//                                        registerChildViewModel.lastNameInput,
-//                                        registerChildViewModel.emailInput,
-//                                        registerChildViewModel.passwordInput
-//                                    )
+                                    registerChildViewModel.showErrors = true
+                                    registerChildViewModel.errorMessage = Validation().validateRegistration(
+                                        registerChildViewModel.firstNameInput,
+                                        registerChildViewModel.lastNameInput,
+                                        registerChildViewModel.emailInput,
+                                        registerChildViewModel.passwordInput
+                                    )
 
                                     if (registerChildViewModel.errorMessage.isEmpty()) {
                                         registerChildViewModel.registerChild { success ->
