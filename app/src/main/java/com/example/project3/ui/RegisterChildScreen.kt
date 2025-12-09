@@ -100,6 +100,8 @@ fun RegisterChildScreen(
                                 color = Color.Gray
                             )
                             Spacer(modifier = Modifier.height(32.dp))
+
+                            // First name input
                             OutlinedTextField(
                                 value = registerChildViewModel.firstNameInput,
                                 onValueChange = { registerChildViewModel.firstNameInput = it },
@@ -112,6 +114,8 @@ fun RegisterChildScreen(
                                 shape = RoundedCornerShape(12.dp)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
+
+                            // Last name input
                             OutlinedTextField(
                                 value = registerChildViewModel.lastNameInput,
                                 onValueChange = { registerChildViewModel.lastNameInput = it },
@@ -124,6 +128,8 @@ fun RegisterChildScreen(
                                 shape = RoundedCornerShape(12.dp)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
+
+                            // Email input
                             OutlinedTextField(
                                 value = registerChildViewModel.emailInput,
                                 onValueChange = { registerChildViewModel.emailInput = it },
@@ -139,6 +145,8 @@ fun RegisterChildScreen(
                                 shape = RoundedCornerShape(12.dp)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
+
+                            // Password input
                             OutlinedTextField(
                                 value = registerChildViewModel.passwordInput,
                                 onValueChange = { registerChildViewModel.passwordInput = it },

@@ -45,6 +45,7 @@ fun ChildDashboardScreen(
         childDashboardViewModel.loadChildData(childEmail)
     }
 
+    // List of all the current game levels
     val gameLevels = remember(childDashboardViewModel.isLevel2Unlocked) {
                 listOf(
                     GameLevel(1, 1, "Level 1 - Game 1", "Learn basic movements: Up, Down, Right"),

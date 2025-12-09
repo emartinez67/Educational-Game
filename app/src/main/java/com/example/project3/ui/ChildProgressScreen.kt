@@ -107,6 +107,8 @@ fun ChildProgressScreen(
                 }
             }
             if (childProgressViewModel.progressData.isNotEmpty()) {
+
+                // Chart to show child's score progress
                 item {
                     Card(
                         modifier = Modifier.fillMaxWidth(),

@@ -53,6 +53,7 @@ fun Level2Game3Screen(
     val context = LocalContext.current
     var playerPosition by remember { mutableStateOf(Pair(0, 0)) }
 
+    // Stars on the map
     val stars = listOf(
         Pair(3, 3),
         Pair(6, 6),

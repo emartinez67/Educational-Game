@@ -32,6 +32,9 @@ class RegisterChildViewModel(private val userRepo: UserRepository): ViewModel() 
     var errorMessage by mutableStateOf("")
     var parentId by mutableStateOf(0L)
 
+    /**
+     * Gets the parent that's logged in by the email that was used to log in
+     */
     fun loadParentId(parentEmail: String) {
         viewModelScope.launch {
             val parent = userRepo.getParentByEmail(parentEmail)
@@ -41,6 +44,9 @@ class RegisterChildViewModel(private val userRepo: UserRepository): ViewModel() 
         }
     }
 
+    /**
+     * Registers the child into the database using the userRepository class
+     */
     fun registerChild(onResult: (Boolean) -> Unit) {
         viewModelScope.launch {
             try {

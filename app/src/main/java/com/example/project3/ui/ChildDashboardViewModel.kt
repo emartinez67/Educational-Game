@@ -30,6 +30,9 @@ class ChildDashboardViewModel(private val userRepo: UserRepository): ViewModel()
     var isLevel2Unlocked by mutableStateOf(false)
     var isLoading by mutableStateOf(false)
 
+    /**
+     * Gets child's data from the database using the email logged in with
+     */
     fun loadChildData(email: String) {
         viewModelScope.launch {
             isLoading = true
@@ -43,6 +46,9 @@ class ChildDashboardViewModel(private val userRepo: UserRepository): ViewModel()
         }
     }
 
+    /**
+     * Get's a child's progression statistics from the database
+     */
     private suspend fun loadProgressStats() {
         completedGames = userRepo.getTotalCompletedGames(childId)
         totalScore = userRepo.getTotalScore(childId) ?: 0

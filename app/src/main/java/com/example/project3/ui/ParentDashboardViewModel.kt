@@ -28,6 +28,9 @@ class ParentDashboardViewModel(private val userRepo: UserRepository): ViewModel(
     var children by mutableStateOf<List<Child>>(emptyList())
     var isLoading by mutableStateOf(false)
 
+    /**
+     * Gets the parent's data based off the email used to log in
+     */
     fun loadParentData(email: String) {
         viewModelScope.launch {
             isLoading = true
@@ -40,6 +43,9 @@ class ParentDashboardViewModel(private val userRepo: UserRepository): ViewModel(
         }
     }
 
+    /**
+     * Gets a list of all of a parent's children from the database
+     */
     fun loadChildren() {
         viewModelScope.launch {
             if (parentId != 0L) {
@@ -48,6 +54,9 @@ class ParentDashboardViewModel(private val userRepo: UserRepository): ViewModel(
         }
     }
 
+    /**
+     * Deletes a child from the database and reloads them on the UI
+     */
     fun deleteChild(child: Child) {
         viewModelScope.launch {
             userRepo.deleteChild(child)

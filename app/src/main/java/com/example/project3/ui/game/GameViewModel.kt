@@ -27,6 +27,9 @@ class GameViewModel(private val userRepo: UserRepository) : ViewModel() {
     var isSavingProgress by mutableStateOf(false)
     var saveError by mutableStateOf<String?>(null)
 
+    /**
+     * Saves the game progress to the database
+     */
     fun saveGameProgress(
         childEmail: String,
         level: Int,

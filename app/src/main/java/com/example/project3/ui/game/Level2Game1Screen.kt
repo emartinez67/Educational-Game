@@ -63,19 +63,6 @@ fun Level2Game1Screen(
 
     val coroutineScope = rememberCoroutineScope()
 
-    val optimalSequence = listOf(
-        CommandType.LOOP_START,
-        CommandType.MOVE_RIGHT,
-        CommandType.MOVE_RIGHT,
-        CommandType.MOVE_RIGHT,
-        CommandType.MOVE_RIGHT,
-        CommandType.MOVE_DOWN,
-        CommandType.MOVE_DOWN,
-        CommandType.MOVE_DOWN,
-        CommandType.MOVE_DOWN,
-        CommandType.LOOP_END
-    )
-
     val animatedOffsetX by animateFloatAsState(
         targetValue = playerPosition.first.toFloat(),
         animationSpec = tween(durationMillis = 400, easing = LinearEasing),

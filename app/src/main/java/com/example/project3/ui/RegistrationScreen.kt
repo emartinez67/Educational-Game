@@ -24,6 +24,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.project3.data.Validation
 
+/**
+ * Screen used for registering a parent
+ */
 @Composable
 fun RegistrationScreen(
     navController: NavController,
@@ -88,6 +91,8 @@ fun RegistrationScreen(
                                 color = Color.Gray
                             )
                             Spacer(modifier = Modifier.height(32.dp))
+
+                            // First name input
                             OutlinedTextField(
                                 value = registrationViewModel.firstNameInput,
                                 onValueChange = { registrationViewModel.firstNameInput = it },
@@ -100,6 +105,8 @@ fun RegistrationScreen(
                                 shape = RoundedCornerShape(12.dp)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
+
+                            // Last name input
                             OutlinedTextField(
                                 value = registrationViewModel.lastNameInput,
                                 onValueChange = { registrationViewModel.lastNameInput = it },
@@ -112,6 +119,8 @@ fun RegistrationScreen(
                                 shape = RoundedCornerShape(12.dp)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
+
+                            // Email input
                             OutlinedTextField(
                                 value = registrationViewModel.emailInput,
                                 onValueChange = { registrationViewModel.emailInput = it },
@@ -127,6 +136,8 @@ fun RegistrationScreen(
                                 shape = RoundedCornerShape(12.dp)
                             )
                             Spacer(modifier = Modifier.height(16.dp))
+
+                            // Password input
                             OutlinedTextField(
                                 value = registrationViewModel.passwordInput,
                                 onValueChange = { registrationViewModel.passwordInput = it },

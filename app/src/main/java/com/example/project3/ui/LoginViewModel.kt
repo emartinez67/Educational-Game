@@ -30,6 +30,9 @@ class LoginViewModel(private val userRepo: UserRepository): ViewModel() {
     var loginSuccess by mutableStateOf(false)
     var loginError by mutableStateOf("")
 
+    /**
+     * Authenticates the parent's email and password put in the Login Screen
+     */
     fun authenticateParent(onResult: (Boolean, String) -> Unit) {
         loginError = ""
 
@@ -51,6 +54,9 @@ class LoginViewModel(private val userRepo: UserRepository): ViewModel() {
         }
     }
 
+    /**
+     * Authenticates the child's email and password put in the Login Screen
+     */
     fun authenticateChild(onResult: (Boolean, String) -> Unit) {
         loginError = ""
 

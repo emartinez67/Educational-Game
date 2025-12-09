@@ -103,6 +103,8 @@ fun LoginScreen(
                             modifier = Modifier.align(Alignment.Start)
                         )
                         Spacer(modifier = Modifier.height(12.dp))
+
+                        // User type selection
                         Row(
                             modifier = Modifier
                                 .fillMaxWidth()
@@ -122,6 +124,8 @@ fun LoginScreen(
                             }
                         }
                         Spacer(modifier = Modifier.height(24.dp))
+
+                        // Email input
                         OutlinedTextField(
                             value = loginViewModel.emailInput,
                             onValueChange = { loginViewModel.emailInput = it },
@@ -137,6 +141,8 @@ fun LoginScreen(
                             shape = RoundedCornerShape(12.dp)
                         )
                         Spacer(modifier = Modifier.height(16.dp))
+
+                        // Password input
                         OutlinedTextField(
                             value = loginViewModel.passwordInput,
                             onValueChange = { loginViewModel.passwordInput = it },

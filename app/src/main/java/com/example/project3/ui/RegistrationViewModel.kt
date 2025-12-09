@@ -29,6 +29,9 @@ class RegistrationViewModel(private val userRepo: UserRepository): ViewModel() {
     var showErrors by mutableStateOf(false)
     var errorMessage by mutableStateOf("")
 
+    /**
+     * Registers the parent into the database using the userRepository class
+     */
     fun registerParent(firstName: String, lastName: String, email: String, password: String) {
         userRepo.registerParent(Parent(
             firstName = firstName,

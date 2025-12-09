@@ -36,6 +36,9 @@ class ChildProgressViewModel(private val userRepo: UserRepository): ViewModel() 
     var averageScore by mutableStateOf(0.0)
     var progressData by mutableStateOf<List<GameProgress>>(emptyList())
 
+    /**
+     * Gets child's data from the database using the email logged in with
+     */
     fun loadChildData(email: String) {
         viewModelScope.launch {
             isLoading = true
@@ -50,6 +53,9 @@ class ChildProgressViewModel(private val userRepo: UserRepository): ViewModel() 
         }
     }
 
+    /**
+     * Get's the child's progress data from the database
+     */
     fun loadProgressData(email: String) {
         viewModelScope.launch {
             val child = userRepo.getChildByEmail(email)
@@ -62,6 +68,9 @@ class ChildProgressViewModel(private val userRepo: UserRepository): ViewModel() 
         }
     }
 
+    /**
+     * Formats date
+     */
     private fun formatDate(timestamp: Long): String {
         val sdf = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
         return sdf.format(Date(timestamp))
